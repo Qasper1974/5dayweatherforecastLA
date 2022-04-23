@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import Weather from "./Weather";
 import styles from "./WeatherForecast.module.css";
 
 function WeatherForecast() {
@@ -10,11 +11,23 @@ function WeatherForecast() {
 				"https://api.openweathermap.org/data/2.5/onecall?lat=34.05&lon=-118.24&units=metric&exclude=alerts,minutely,hourly&appid=014792182e8f357181156709dcf4db7c"
 			);
 			const data = await response.json();
+			console.log(data);
 			const transformedData = data.daily.map((data) => {
-				return { key: data.dt, dayhigh: data.temp.day };
+				const daylist = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+				for (let i = 0; i < 5; i++) {
+					return {
+						key: data.dt,
+						dayhigh: data.temp.max,
+						daylow: data.temp.min,
+						dayicon: data.weather[`${i}`].icon,
+						date: daylist[new Date(data.dt * 1000).getDay()],
+					};
+				}
 			});
-			console.log(transformedData);
-			// setWeather(transformedData);
+			const reducedarray = transformedData.slice(0, 5);
+			console.log(reducedarray);
+			setWeather(reducedarray);
 			if (!response.ok) {
 				throw new Error("Something went wrong.");
 			}
@@ -29,9 +42,15 @@ function WeatherForecast() {
 
 	return (
 		<div>
-			{/* {weather.map((dayTemp) => (
-				// <p id={key}>{dayTemp}</p>
-			))} */}
+			{weather.map((day) => (
+				<Weather
+					key={day.key}
+					dayhigh={day.dayhigh}
+					daylow={day.daylow}
+					dayicon={day.dayicon}
+                    date={day.date}
+				/>
+			))}
 		</div>
 	);
 }
