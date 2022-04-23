@@ -1,4 +1,5 @@
 import styles from "./App.module.css";
+import WeatherForecast from "./components/WeatherForecast";
 
 function App() {
 	return (
@@ -8,9 +9,9 @@ function App() {
 				<br />
 				<h1>Los Angeles</h1>
 			</section>
-            <section>
-                weather data
-            </section>
+			<section>
+				<WeatherForecast />
+			</section>
 		</div>
 	);
 }
